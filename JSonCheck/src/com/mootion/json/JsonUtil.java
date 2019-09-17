@@ -40,7 +40,7 @@ public class JsonUtil {
 			throw new JsonCheckException("Json解析失败！");
 		}
 		if (pack != null) {
-			List<Rule> rulerList = pack.getRulerList();
+			List<Rule> rulerList = pack.getRuleList();
 			ErrorMessage msg = new ErrorMessage(pack.getHandleName());
 			if (CheckUtil.isNotEmpty(rulerList)) {
 				for (Rule ruler : rulerList) {
@@ -146,7 +146,7 @@ public class JsonUtil {
 			return false;
 		}
 		// 连带值校验 -- 文本未优化
-		if (!checkValueRulerList(value, label, ruler.getValueRulerList(), map, msg)) {
+		if (!checkValueRulerList(value, label, ruler.getValueRuleList(), map, msg)) {
 			return false;
 		}
 		return true;

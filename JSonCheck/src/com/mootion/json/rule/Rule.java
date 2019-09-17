@@ -38,13 +38,13 @@ public class Rule {
 	private List<Object> valueList;
 	
 	/** 指定属性值校验 */
-	private Map<Rule, List<Rule>> valueRulerList;
+	private Map<Rule, List<Rule>> valueRuleList;
 
 	@Override
 	public String toString() {
 		return "Ruler [key=" + key + ", label=" + label + ", type=" + type + ", nessecary=" + nessecary + ", maxLength="
 				+ maxLength + ", minValue=" + minValue + ", maxValue=" + maxValue + ", valueList=" + valueList
-				+ ", valueRulerList=" + valueRulerList + "]";
+				+ ", valueRuleList=" + valueRuleList + "]";
 	}
 	
 }

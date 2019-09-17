@@ -16,11 +16,11 @@ public class RulePack {
 	private String handleName;
 	
 	/**   规则列表   */
-	private List<Rule> rulerList;
+	private List<Rule> ruleList;
 
 	@Override
 	public String toString() {
-		return "RulerPack [handleName=" + handleName + ", rulerList=" + rulerList + "]";
+		return "RulerPack [handleName=" + handleName + ", ruleList=" + ruleList + "]";
 	}
 	
 }
