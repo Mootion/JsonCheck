@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import com.mootion.json.JsonUtil;
 import com.mootion.json.exception.JsonCheckException;
 
@@ -9,11 +10,12 @@ public class JsonTest {
 			+ "{\"key\":\"age\",\"type\":\"Integer\",\"minValue\":0,\"valueList\":[11,12,13]}"
 			+ "]}";
 	
-	private static String dataJson = "{\"name\":\"People1\",\"age\":\"18\"}";
+	private static String dataJson = "{\"name\":\"People1\",\"age\":\"18\",\"USER_ID\":\"userid\",\"Orgid\":\"organization\"}";
 	public static void main(String[] args) {
 		try {
 			Person p = JsonUtil.jsonFormart(dataJson, ruleJson, Person.class);
 			System.out.println(p);
+			System.out.println(new Gson().toJson(p));
 		} catch (JsonCheckException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());

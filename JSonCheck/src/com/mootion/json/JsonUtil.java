@@ -32,10 +32,9 @@ public class JsonUtil {
 	 * @throws JsonCheckException
 	 */
 	public static Map<?, ?> jsonCheck(String json, RulePack pack) throws JsonCheckException {
-		Gson gson = new Gson();
 		Map<?, ?> map;
 		try {
-			map = gson.fromJson(json, HashMap.class);
+			map = new Gson().fromJson(json, HashMap.class);
 		} catch (JsonSyntaxException e) {
 			throw new JsonCheckException("Json解析失败！");
 		}
@@ -77,15 +76,8 @@ public class JsonUtil {
 	 * @throws JsonCheckException
 	 */
 	public static <T> T jsonFormart(String json, RulePack pack, Class<T> requiredType) throws JsonCheckException {
-		Map<?, ?> map = jsonCheck(json, pack);
-		try {
-			T obj = requiredType.newInstance();
-			BeanUtils.populate(obj, map);
-			return obj;
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+		jsonCheck(json, pack);
+		return new Gson().fromJson(json, requiredType);
 	}
 
 	/**
@@ -103,10 +95,8 @@ public class JsonUtil {
 	}
 
 	private static RulePack getRulerPack(String rulerJson) throws JsonCheckException {
-		Gson gson = new Gson();
 		try {
-			RulePack pack = gson.fromJson(rulerJson, RulePack.class);
-			return pack;
+			return new Gson().fromJson(rulerJson, RulePack.class);
 		} catch (JsonSyntaxException e) {
 			throw new JsonCheckException("Json校验不可用，请联系后台管理员！");
 		}
@@ -154,6 +144,7 @@ public class JsonUtil {
 
 	/**
 	 ** 连带值校验 -- 文本未优化
+	 * 
 	 * @param value
 	 * @param label
 	 * @param valueRulerList
