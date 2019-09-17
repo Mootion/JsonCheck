@@ -11,8 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mootion.json.exception.ErrorMessage;
 import com.mootion.json.exception.JsonCheckException;
-import com.mootion.json.rule.Ruler;
-import com.mootion.json.rule.RulerPack;
+import com.mootion.json.rule.Rule;
+import com.mootion.json.rule.RulePack;
 import com.mootion.util.check.CheckUtil;
 
 /**
@@ -31,7 +31,7 @@ public class JsonUtil {
 	 * @return
 	 * @throws JsonCheckException
 	 */
-	public static Map<?, ?> jsonCheck(String json, RulerPack pack) throws JsonCheckException {
+	public static Map<?, ?> jsonCheck(String json, RulePack pack) throws JsonCheckException {
 		Gson gson = new Gson();
 		Map<?, ?> map;
 		try {
@@ -40,10 +40,10 @@ public class JsonUtil {
 			throw new JsonCheckException("Json解析失败！");
 		}
 		if (pack != null) {
-			List<Ruler> rulerList = pack.getRulerList();
+			List<Rule> rulerList = pack.getRulerList();
 			ErrorMessage msg = new ErrorMessage(pack.getHandleName());
 			if (CheckUtil.isNotEmpty(rulerList)) {
-				for (Ruler ruler : rulerList) {
+				for (Rule ruler : rulerList) {
 					ruleCheck(map, ruler, rulerList, msg);
 				}
 			}
@@ -76,7 +76,7 @@ public class JsonUtil {
 	 * @return
 	 * @throws JsonCheckException
 	 */
-	public static <T> T jsonFormart(String json, RulerPack pack, Class<T> requiredType) throws JsonCheckException {
+	public static <T> T jsonFormart(String json, RulePack pack, Class<T> requiredType) throws JsonCheckException {
 		Map<?, ?> map = jsonCheck(json, pack);
 		try {
 			T obj = requiredType.newInstance();
@@ -102,10 +102,10 @@ public class JsonUtil {
 		return jsonFormart(json, getRulerPack(ruleJson), requiredType);
 	}
 
-	private static RulerPack getRulerPack(String rulerJson) throws JsonCheckException {
+	private static RulePack getRulerPack(String rulerJson) throws JsonCheckException {
 		Gson gson = new Gson();
 		try {
-			RulerPack pack = gson.fromJson(rulerJson, RulerPack.class);
+			RulePack pack = gson.fromJson(rulerJson, RulePack.class);
 			return pack;
 		} catch (JsonSyntaxException e) {
 			throw new JsonCheckException("Json校验不可用，请联系后台管理员！");
@@ -121,7 +121,7 @@ public class JsonUtil {
 	 * @param msg
 	 * @return
 	 */
-	private static boolean ruleCheck(Map<?, ?> map, Ruler ruler, List<Ruler> rulerList, ErrorMessage msg) {
+	private static boolean ruleCheck(Map<?, ?> map, Rule ruler, List<Rule> rulerList, ErrorMessage msg) {
 		String label;
 		Object value = map.get(ruler.getKey());
 		label = ruler.getLabel() == null ? ruler.getKey() : ruler.getLabel();
@@ -161,10 +161,10 @@ public class JsonUtil {
 	 * @param msg
 	 * @return
 	 */
-	private static boolean checkValueRulerList(Object value, String label, Map<Ruler, List<Ruler>> valueRulerList,
+	private static boolean checkValueRulerList(Object value, String label, Map<Rule, List<Rule>> valueRulerList,
 			Map<?, ?> map, ErrorMessage msg) {
 		if (CheckUtil.isNotEmpty(valueRulerList)) {
-			for (Ruler keyRuler : valueRulerList.keySet()) {
+			for (Rule keyRuler : valueRulerList.keySet()) {
 				boolean checked = false;
 				if (keyRuler.getMinValue() != null || keyRuler.getMaxLength() != null) {
 					checked = checkValueArea(value, label, keyRuler.getType(), keyRuler.getMinValue(),

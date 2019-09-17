@@ -11,7 +11,7 @@ import lombok.Data;
  *
  */
 @Data
-public class Ruler {
+public class Rule {
 	
 	/** 字段名称 */
 	private String key;
@@ -38,7 +38,7 @@ public class Ruler {
 	private List<Object> valueList;
 	
 	/** 指定属性值校验 */
-	private Map<Ruler, List<Ruler>> valueRulerList;
+	private Map<Rule, List<Rule>> valueRulerList;
 
 	@Override
 	public String toString() {

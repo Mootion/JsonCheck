@@ -10,13 +10,13 @@ import lombok.Data;
  *
  */
 @Data
-public class RulerPack {
+public class RulePack {
 
 	/**   操作名称   */
 	private String handleName;
 	
 	/**   规则列表   */
-	private List<Ruler> rulerList;
+	private List<Rule> rulerList;
 
 	@Override
 	public String toString() {
