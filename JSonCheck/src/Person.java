@@ -15,11 +15,13 @@ public class Person {
 	
 	@SerializedName("Orgid")
 	private String Orgid;
+	
+	private Person nextPerson;
 
 	@Override
 	public String toString() {
 		return "Person [name=" + name + ", age=" + age + ", height=" + height + ", USER_ID=" + USER_ID + ", Orgid="
-				+ Orgid + "]";
+				+ Orgid + ", nextPerson=" + nextPerson + "]";
 	}
 	
 }

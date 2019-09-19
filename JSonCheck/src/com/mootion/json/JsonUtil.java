@@ -1,11 +1,8 @@
 package com.mootion.json;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -113,10 +110,23 @@ public class JsonUtil {
 	 */
 	private static boolean ruleCheck(Map<?, ?> map, Rule ruler, List<Rule> rulerList, ErrorMessage msg) {
 		String label;
-		Object value = map.get(ruler.getKey());
+		Object value = null;
+		String key = ruler.getKey();
+		if (map != null) {
+			if (key.indexOf(".") == -1) {
+				value = map.get(key);
+			} else {
+				String[] keyList = key.split("[.]");
+				Map<?,?> childMap = map;
+				for (int i = 0; i < keyList.length - 1; i++) {
+					childMap = (Map<?,?>) childMap.get(keyList[i]);
+				}
+				value = childMap.get(keyList[keyList.length - 1]);
+			}
+		}
 		label = ruler.getLabel() == null ? ruler.getKey() : ruler.getLabel();
 		// 必填校验
-		if (!checkNessecary(value, label, ruler.getNessecary(), msg)) {
+		if (!checkNecessary(value, label, ruler.getNecessary(), msg)) {
 			return false;
 		}
 		// 类型校验
@@ -182,8 +192,8 @@ public class JsonUtil {
 	 * @param msg
 	 * @return
 	 */
-	private static boolean checkNessecary(Object value, String label, Boolean nessecary, ErrorMessage msg) {
-		if (nessecary != null && nessecary) {
+	private static boolean checkNecessary(Object value, String label, Boolean necessary, ErrorMessage msg) {
+		if (necessary != null && necessary) {
 			if (value == null || String.valueOf(value).length() == 0) {
 				if (msg != null) {
 					msg.addErrorMessage(label + "不能为空");
@@ -204,7 +214,7 @@ public class JsonUtil {
 	 * @return
 	 */
 	private static boolean checkType(Object value, String label, String type, ErrorMessage msg) {
-		if (CheckUtil.isNotBlank(type)) {
+		if (value != null && CheckUtil.isNotBlank(type)) {
 			if (DataType.INTEGER.equals(type) && !CheckUtil.isIntegerValue(value.toString())) {
 				// 整型
 				if (msg != null) {
@@ -232,7 +242,7 @@ public class JsonUtil {
 	 * @return
 	 */
 	private static boolean checkLength(Object value, String label, Integer maxLength, ErrorMessage msg) {
-		if (maxLength != null && value.toString().getBytes().length > maxLength) {
+		if (value != null && maxLength != null && value.toString().getBytes().length > maxLength) {
 			if (msg != null) {
 				msg.addErrorMessage(label + "超出最大长度限制：" + maxLength);
 			}
@@ -254,7 +264,7 @@ public class JsonUtil {
 	 */
 	private static boolean checkValueArea(Object value, String label, String type, Double minValue, Double maxValue,
 			ErrorMessage msg) {
-		if (DataType.INTEGER.equals(type) || DataType.DOUBLE.equals(type)) {
+		if (value != null && (DataType.INTEGER.equals(type) || DataType.DOUBLE.equals(type))) {
 			double dValue = Double.valueOf(value.toString());
 			if (minValue != null && dValue < minValue) {
 				if (msg != null) {
@@ -293,7 +303,7 @@ public class JsonUtil {
 			ErrorMessage msg) {
 		boolean result = true;
 		String strList = "";
-		if (CheckUtil.isNotEmpty(valueList)) {
+		if (value != null && CheckUtil.isNotEmpty(valueList)) {
 			String strValueList = valueList.toString();
 			if (DataType.INTEGER.equals(type) || DataType.DOUBLE.equals(type)) {
 				double doubleValue = Double.parseDouble(value.toString());

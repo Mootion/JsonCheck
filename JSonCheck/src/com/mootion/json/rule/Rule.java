@@ -23,7 +23,7 @@ public class Rule {
 	private String type;
 	
 	/** 必填 */
-	private Boolean nessecary;
+	private Boolean necessary;
 	
 	/** 最大长度 */
 	private Integer maxLength;
@@ -42,9 +42,9 @@ public class Rule {
 
 	@Override
 	public String toString() {
-		return "Ruler [key=" + key + ", label=" + label + ", type=" + type + ", nessecary=" + nessecary + ", maxLength="
+		return "Rule [key=" + key + ", label=" + label + ", type=" + type + ", necessary=" + necessary + ", maxLength="
 				+ maxLength + ", minValue=" + minValue + ", maxValue=" + maxValue + ", valueList=" + valueList
 				+ ", valueRuleList=" + valueRuleList + "]";
 	}
-	
+
 }
