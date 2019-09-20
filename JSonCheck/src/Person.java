@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
@@ -17,11 +18,13 @@ public class Person {
 	private String Orgid;
 	
 	private Person nextPerson;
+	
+	private String birthDay;
 
 	@Override
 	public String toString() {
-		return "Person [name=" + name + ", age=" + age + ", height=" + height + ", USER_ID=" + USER_ID + ", Orgid="
-				+ Orgid + ", nextPerson=" + nextPerson + "]";
+		return new Gson().toJson(this);
 	}
+
 	
 }

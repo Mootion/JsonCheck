@@ -12,4 +12,6 @@ public class DataType {
 	final static String INTEGER = "Integer";
 	
 	final static String DOUBLE = "Double";
+	
+	final static String DATE = "Date";
 }

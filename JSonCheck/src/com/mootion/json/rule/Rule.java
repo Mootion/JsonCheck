@@ -25,6 +25,9 @@ public class Rule {
 	/** 必填 */
 	private Boolean necessary;
 	
+	/** 格式 */
+	private String format;
+	
 	/** 最大长度 */
 	private Integer maxLength;
 	

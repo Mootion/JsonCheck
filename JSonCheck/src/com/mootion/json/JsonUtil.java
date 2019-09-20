@@ -1,5 +1,7 @@
 package com.mootion.json;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,15 +105,15 @@ public class JsonUtil {
 	 ** 规则校验
 	 * 
 	 * @param map
-	 * @param ruler
+	 * @param rule
 	 * @param rulerList
 	 * @param msg
 	 * @return
 	 */
-	private static boolean ruleCheck(Map<?, ?> map, Rule ruler, List<Rule> rulerList, ErrorMessage msg) {
+	private static boolean ruleCheck(Map<?, ?> map, Rule rule, List<Rule> rulerList, ErrorMessage msg) {
 		String label;
 		Object value = null;
-		String key = ruler.getKey();
+		String key = rule.getKey();
 		if (map != null) {
 			if (key.indexOf(".") == -1) {
 				value = map.get(key);
@@ -124,29 +126,33 @@ public class JsonUtil {
 				value = childMap.get(keyList[keyList.length - 1]);
 			}
 		}
-		label = ruler.getLabel() == null ? ruler.getKey() : ruler.getLabel();
+		label = rule.getLabel() == null ? rule.getKey() : rule.getLabel();
 		// 必填校验
-		if (!checkNecessary(value, label, ruler.getNecessary(), msg)) {
+		if (!checkNecessary(value, label, rule.getNecessary(), msg)) {
 			return false;
 		}
 		// 类型校验
-		if (!checkType(value, label, ruler.getType(), msg)) {
+		if (!checkType(value, label, rule.getType(), msg)) {
+			return false;
+		}
+		// 格式校验
+		if (!checkFormat(value,label,rule.getType(),rule.getFormat(),msg)) {
 			return false;
 		}
 		// 长度校验
-		if (!checkLength(value, label, ruler.getMaxLength(), msg)) {
+		if (!checkLength(value, label, rule.getMaxLength(), msg)) {
 			return false;
 		}
 		// 值域校验 -- 最大最小值校验
-		if (!checkValueArea(value, label, ruler.getType(), ruler.getMinValue(), ruler.getMaxValue(), msg)) {
+		if (!checkValueArea(value, label, rule.getType(), rule.getMinValue(), rule.getMaxValue(), msg)) {
 			return false;
 		}
 		// 值域校验 -- 可选值校验
-		if (!checkValueExist(value, label, ruler.getType(), ruler.getValueList(), msg)) {
+		if (!checkValueExist(value, label, rule.getType(), rule.getValueList(), msg)) {
 			return false;
 		}
 		// 连带值校验 -- 文本未优化
-		if (!checkValueRulerList(value, label, ruler.getValueRuleList(), map, msg)) {
+		if (!checkValueRulerList(value, label, rule.getValueRuleList(), map, msg)) {
 			return false;
 		}
 		return true;
@@ -228,6 +234,34 @@ public class JsonUtil {
 				}
 				return false;
 			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 格式校验
+	 * @param value
+	 * @param label
+	 * @param type
+	 * @param format
+	 * @param msg
+	 * @return
+	 */
+	private static boolean checkFormat(Object value, String label, String type, String format, ErrorMessage msg) {
+		if (value != null && CheckUtil.isNotBlank(format)) {
+			// 日期类型校验
+			if (DataType.DATE.equals(type)) {
+				SimpleDateFormat sdf = new SimpleDateFormat(format);
+				try {
+					sdf.parse(value.toString());
+				} catch (ParseException e) {
+					if (msg != null) {
+						msg.addErrorMessage(label + ":" + value + "不符合规则" + format);
+					}
+					return false;
+				}
+			}
+			// TODO 正则校验
 		}
 		return true;
 	}
