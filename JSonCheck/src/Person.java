@@ -20,6 +20,8 @@ public class Person {
 	private Person nextPerson;
 	
 	private String birthDay;
+	
+	private Boolean alive;
 
 	@Override
 	public String toString() {

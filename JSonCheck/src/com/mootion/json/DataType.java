@@ -14,4 +14,6 @@ public class DataType {
 	final static String DOUBLE = "Double";
 	
 	final static String DATE = "Date";
+	
+	final static String BOOLEAN = "Boolean";
 }

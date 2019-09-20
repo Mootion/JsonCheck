@@ -5,15 +5,16 @@ import com.mootion.json.exception.JsonCheckException;
 public class JsonTest {
 	
 	private static String ruleJson = "{\"handleName\":\"测试操作\",\"ruleList\":["
-			+ "{\"key\":\"nextPerson.name\",\"label\":\"姓名\",\"nessecary\":true},"
-			+ "{\"key\":\"name\",\"label\":\"姓名\",\"maxLength\":2},"
-			+ "{\"key\":\"height\",\"label\":\"体重\",\"nessecary\":true},"
+			+ "{\"key\":\"nextPerson.name\",\"label\":\"姓名\",\"necessary\":true},"
+			+ "{\"key\":\"name\",\"label\":\"姓名\",\"maxLength\":10},"
+//			+ "{\"key\":\"height\",\"label\":\"体重\",\"necessary\":true},"
+			+ "{\"key\":\"alive\",\"label\":\"生还\",\"necessary\":true,\"type\":\"Boolean\"},"
 			+ "{\"key\":\"birthDay\",\"label\":\"生日\",\"type\":\"Date\",\"format\":\"yyyy/MM/dd\"},"
-			+ "{\"key\":\"age\",\"type\":\"Integer\",\"minValue\":0,\"valueList\":[11,12,13]}"
+			+ "{\"key\":\"age\",\"type\":\"Integer\",\"minValue\":0,\"valueList\":[11,12,13,18]}"
 			+ "]}";
 //	private static String ruleJson = null;
-	private static String dataJson = "{\"name\":\"People1\",\"age\":\"18\",\"USER_ID\":\"userid\",\"Orgid\":\"organization\","
-			+ "\"nextPerson\":{\"name\":\"People2\"},\"birthDay\":\"2019/07/18\"" + 
+	private static String dataJson = "{\"name\":\"People\",\"age\":\"18\",\"USER_ID\":\"userid\",\"Orgid\":\"organization\","
+			+ "\"nextPerson\":{\"name\":\"People2\"},\"birthDay\":\"2019/07/18\",\"alive\":\"true\"" + 
 			"}";
 	public static void main(String[] args) {
 		try {

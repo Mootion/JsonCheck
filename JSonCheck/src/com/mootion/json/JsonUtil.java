@@ -233,6 +233,14 @@ public class JsonUtil {
 					msg.addErrorMessage(label + "不是一个数字");
 				}
 				return false;
+			} else if (DataType.BOOLEAN.equals(type)) {
+				// 布尔型
+				if (!(value instanceof Boolean)) {
+					if (msg != null) {
+						msg.addErrorMessage(label + "不是布尔值");
+					}
+					return false;
+				}
 			}
 		}
 		return true;
