@@ -18,7 +18,7 @@ public class JsonTest {
 			"}";
 	public static void main(String[] args) {
 		try {
-			Person p = JsonUtil.jsonFormart(dataJson, ruleJson, Person.class);
+			Person p = JsonUtil.jsonFormart(dataJson, ruleJson, Person.class, null);
 			System.out.println(p);
 			System.out.println(new Gson().toJson(p));
 		} catch (JsonCheckException e) {

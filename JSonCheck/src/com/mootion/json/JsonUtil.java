@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.mootion.json.exception.ErrorMessage;
 import com.mootion.json.exception.JsonCheckException;
@@ -74,9 +75,17 @@ public class JsonUtil {
 	 * @return
 	 * @throws JsonCheckException
 	 */
-	public static <T> T jsonFormart(String json, RulePack pack, Class<T> requiredType) throws JsonCheckException {
+	public static <T> T jsonFormart(String json, RulePack pack, Class<T> requiredType, Map<Class<?>, Object> map)
+			throws JsonCheckException {
 		jsonCheck(json, pack);
-		return new Gson().fromJson(json, requiredType);
+		GsonBuilder gb = new GsonBuilder();
+		if(CheckUtil.isNotEmpty(map)) {
+			for (Class<?> fromClass : map.keySet()) {
+				gb = gb.registerTypeAdapter(fromClass, map.get(fromClass));
+			}
+		}
+		Gson g = gb.create();
+		return g.fromJson(json, requiredType);
 	}
 
 	/**
@@ -89,8 +98,9 @@ public class JsonUtil {
 	 * @return
 	 * @throws JsonCheckException
 	 */
-	public static <T> T jsonFormart(String json, String ruleJson, Class<T> requiredType) throws JsonCheckException {
-		return jsonFormart(json, getRulerPack(ruleJson), requiredType);
+	public static <T> T jsonFormart(String json, String ruleJson, Class<T> requiredType, Map<Class<?>, Object> map)
+			throws JsonCheckException {
+		return jsonFormart(json, getRulerPack(ruleJson), requiredType, map);
 	}
 
 	private static RulePack getRulerPack(String rulerJson) throws JsonCheckException {
@@ -119,9 +129,9 @@ public class JsonUtil {
 				value = map.get(key);
 			} else {
 				String[] keyList = key.split("[.]");
-				Map<?,?> childMap = map;
+				Map<?, ?> childMap = map;
 				for (int i = 0; i < keyList.length - 1; i++) {
-					childMap = (Map<?,?>) childMap.get(keyList[i]);
+					childMap = (Map<?, ?>) childMap.get(keyList[i]);
 				}
 				value = childMap.get(keyList[keyList.length - 1]);
 			}
@@ -136,7 +146,7 @@ public class JsonUtil {
 			return false;
 		}
 		// 格式校验
-		if (!checkFormat(value,label,rule.getType(),rule.getFormat(),msg)) {
+		if (!checkFormat(value, label, rule.getType(), rule.getFormat(), msg)) {
 			return false;
 		}
 		// 长度校验
@@ -245,9 +255,10 @@ public class JsonUtil {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 格式校验
+	 * 
 	 * @param value
 	 * @param label
 	 * @param type
