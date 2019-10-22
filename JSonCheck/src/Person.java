@@ -1,3 +1,5 @@
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,6 +24,8 @@ public class Person {
 	private String birthDay;
 	
 	private Boolean alive;
+	
+	private List<Integer> idList;
 
 	@Override
 	public String toString() {

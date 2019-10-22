@@ -251,6 +251,22 @@ public class JsonUtil {
 					}
 					return false;
 				}
+			} else if (DataType.OBJECT.equals(type)) {
+				// 对象型
+				if (!(value instanceof Map)) {
+					if (msg != null) {
+						msg.addErrorMessage(label + "不是对象");
+					}
+					return false;
+				}
+			} else if (DataType.ARRAY.equals(type)) {
+				// 数组型
+				if (!(value instanceof List)) {
+					if (msg != null) {
+						msg.addErrorMessage(label + "不是数组");
+					}
+					return false;
+				}
 			}
 		}
 		return true;
