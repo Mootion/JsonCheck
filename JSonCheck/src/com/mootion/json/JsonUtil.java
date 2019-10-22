@@ -79,7 +79,7 @@ public class JsonUtil {
 			throws JsonCheckException {
 		jsonCheck(json, pack);
 		GsonBuilder gb = new GsonBuilder();
-		if(CheckUtil.isNotEmpty(map)) {
+		if (CheckUtil.isNotEmpty(map)) {
 			for (Class<?> fromClass : map.keySet()) {
 				gb = gb.registerTypeAdapter(fromClass, map.get(fromClass));
 			}
@@ -137,6 +137,10 @@ public class JsonUtil {
 			}
 		}
 		label = rule.getLabel() == null ? rule.getKey() : rule.getLabel();
+		return checkValue(value, label, rule, map, msg);
+	}
+
+	private static boolean checkValue(Object value, String label, Rule rule, Map<?, ?> map, ErrorMessage msg) {
 		// 必填校验
 		if (!checkNecessary(value, label, rule.getNecessary(), msg)) {
 			return false;
