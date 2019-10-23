@@ -65,7 +65,7 @@ public class CheckUtil {
 		return !isBlank(obj);
 	}
 
-	private final static Pattern INTEGER_PATTERN = Pattern.compile("^[-+][\\d]+[.]?[0]*");;
+	private final static Pattern INTEGER_PATTERN = Pattern.compile("^[-+]?[\\d]+[.]?[0]*");;
 
 	/**
 	 ** 整数格式校验
