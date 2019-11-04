@@ -79,7 +79,7 @@ public class JsonUtil {
 			throws JsonCheckException {
 		jsonCheck(json, pack);
 		GsonBuilder gb = new GsonBuilder();
-		if(CheckUtil.isNotEmpty(map)) {
+		if (CheckUtil.isNotEmpty(map)) {
 			for (Class<?> fromClass : map.keySet()) {
 				gb = gb.registerTypeAdapter(fromClass, map.get(fromClass));
 			}
@@ -112,8 +112,8 @@ public class JsonUtil {
 	}
 
 	/**
-	 ** 规则校验
-	 ** 暂不支持遍历List 
+	 ** 规则校验 暂不支持遍历List
+	 * 
 	 * @param map
 	 * @param rule
 	 * @param rulerList
@@ -129,45 +129,45 @@ public class JsonUtil {
 
 	/**
 	 ** 获取值
+	 * 
 	 * @param map
 	 * @param key
 	 * @return
 	 */
 	private static Object getValue(Map<?, ?> map, String key) {
-		 Object value = null;
+		Object value = null;
 		if (map != null) {
-			if (key.indexOf(".") == -1) {
-				value = map.get(key);
-			} else {
-				String[] keyList = key.split("[.]");
-				Map<?, ?> childMap = map;
-				for (int i = 0; i < keyList.length - 1; i++) {
-					Object cur = childMap.get(keyList[i]);
-					if (cur == null) {
-						childMap = null;
-						break;
-					}
-					childMap = (Map<?, ?>)cur ;
-				}
-				if (childMap == null) {
-					value = null;
-				} else {
-					value = childMap.get(keyList[keyList.length - 1]);
-				}
-			}
+			return getValue(map, key.split("[.]"));
 		}
 		return value;
 	}
 
+	private static Object getValue(Map<?, ?> map, String[] key) {
+		if (key.length == 1) {
+			return map.get(key);
+		} else {
+			String[] subKey = new String[key.length - 1];
+			Object childMapObj = map.get(key[0]);
+			if (childMapObj instanceof Map) {
+				Map<?, ?> childMap = (Map<?, ?>) childMapObj;
+				System.arraycopy(key, 1, subKey, 0, key.length);
+				return getValue(childMap, subKey);
+			} else {
+				return null;
+			}
+		}
+	}
+
 	/**
 	 ** 值校验
+	 * 
 	 * @param value
 	 * @param label
 	 * @param rule
 	 * @param msg
 	 * @return
 	 */
-	private static boolean checkValue(Map<?, ?> map, Object value,String label,Rule rule,ErrorMessage msg) {
+	private static boolean checkValue(Map<?, ?> map, Object value, String label, Rule rule, ErrorMessage msg) {
 		// 必填校验
 		if (!checkNecessary(value, label, rule.getNecessary(), msg)) {
 			return false;
@@ -198,7 +198,7 @@ public class JsonUtil {
 		}
 		return true;
 	}
-	
+
 	/**
 	 ** 连带值校验 -- 文本未优化
 	 * 
